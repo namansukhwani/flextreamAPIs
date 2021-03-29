@@ -16,7 +16,7 @@ const validateRequest=(body)=>{
     }
 }
 
-router.get('/',(req,res,next)  =>{
+router.post('/',(req,res,next)  =>{
     if(validateRequest(req.body)){
         if("options" in req.body){
             fetch(req.body.url,req.body.options)
