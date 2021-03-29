@@ -17,7 +17,7 @@ const validateRequest=(body)=>{
     }
 }
 
-router.post('/',cors({origin:"*",credentials:true}),(req,res,next)  =>{
+router.post('/',(req,res,next)  =>{
     if(validateRequest(req.body)){
         if("options" in req.body){
             fetch(req.body.url,req.body.options)
