@@ -1,6 +1,7 @@
 const express=require('express');
 const router=express.Router();
 const fetch=require('node-fetch');
+const cors=require('cors')
 
 const validateRequest=(body)=>{
     if("username" in body && "password" in body && "url" in body){
@@ -16,7 +17,7 @@ const validateRequest=(body)=>{
     }
 }
 
-router.post('/',(req,res,next)  =>{
+router.post('/',cors({origin:"*",credentials:true}),(req,res,next)  =>{
     if(validateRequest(req.body)){
         if("options" in req.body){
             fetch(req.body.url,req.body.options)
