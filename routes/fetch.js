@@ -28,18 +28,28 @@ router.post('/',(req,res,next)  =>{
                 res.setHeader('Content-Type','application/json');
                 res.json(data);
             })
-            .catch(err=>next(err))
+            .catch(err=>{
+                // console.log("error:::::::");
+                res.statusCode=500
+                res.json({err:err})
+                // next(err)
+            })
         }
         else{
             fetch(req.body.url)
             .then(response=>response.json())
             .then(data=>{
-                // console.log(data);
+                // console.log("DATA::::",data);
                 res.statusCode=200;
                 res.setHeader('Content-Type','application/json');
                 res.json(data);
             })
-            .catch(err=>next(err))
+            .catch(err=>{
+                // console.log("error:::::::");
+                res.statusCode=500
+                res.json({err:err})
+                // next(err)
+            })
         }
     }
     else{
