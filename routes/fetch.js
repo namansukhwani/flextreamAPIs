@@ -1,7 +1,7 @@
 const express=require('express');
 const router=express.Router();
 const fetch=require('node-fetch');
-const cors=require('cors')
+const file_type=require('file-type');
 
 const validateRequest=(body)=>{
     if("username" in body && "password" in body && "url" in body){
@@ -56,6 +56,32 @@ router.post('/',(req,res,next)  =>{
         var err=new Error("Invalid user request either a wrong user or wrong body parameters.")
         next(err)
     }
+})
+
+router.get('/image',(req,res,next)=>{
+    if(req.query.url){
+        fetch(req.query.url)
+        .then(responce=>responce.buffer())
+        .then(data=>{
+            res.statusCode=200;
+            res.set({
+                "content-type":"image/jpeg"
+            })
+            res.send(data)
+        })
+        .catch(err=>{
+            console.log(err);
+            res.statusCode=500
+            res.json({err:err})
+        })
+    }
+    else{
+        var error=new Error("url query not available");
+        res.statusCode=500;
+        res.send({err:error})
+        // next(err)
+    }
+
 })
 
 module.exports=router
