@@ -63,11 +63,14 @@ router.get('/image',(req,res,next)=>{
         fetch(req.query.url)
         .then(responce=>responce.buffer())
         .then(data=>{
+            const base64String=new Buffer.from(data).toString('base64')
+            console.log(data);
+            console.log(base64String);
             res.statusCode=200;
             res.set({
                 "content-type":"image/jpeg"
             })
-            res.send(data)
+            res.send("data:image/jpg;base64,"+base64String)
         })
         .catch(err=>{
             console.log(err);
