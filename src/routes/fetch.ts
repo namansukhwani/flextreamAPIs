@@ -1,7 +1,8 @@
-const express = require('express');
+import express from 'express';
+import fetch from 'node-fetch'
+import file_type from 'file-type'
+
 const router = express.Router();
-const fetch = require('node-fetch');
-const file_type = require('file-type');
 
 const validateRequest = (body) => {
     if ("username" in body && "password" in body && "url" in body) {
@@ -88,4 +89,4 @@ router.get('/image', (req, res, next) => {
 
 })
 
-module.exports = router
+export default router
