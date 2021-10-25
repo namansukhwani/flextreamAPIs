@@ -5,15 +5,17 @@
   "scripts": {
     "start:dev": "ts-node ./src/bin/www.ts",
     "watch:dev": "nodemon ./src/bin/www.ts",
-    "start:build": "npm-run-all clean build postbuild",
     "start": "node ./dist/src/bin/www.js",
-    "build": "npx tsc",
-    "postbuild": "npm-run-all copyPublic copyViews",
+    "build": "npm-run-all clean compile postbuildcopy",
+    "compile": "npx tsc",
+    "postbuildcopy": "npm-run-all copyPublic copyViews",
     "copyPublic": "copyfiles -u 1 \"./src/public/**\" \"./dist/src/\" ",
     "copyViews": "copyfiles -u 1 \"./src/views/**\" \"./dist/src/\" ",
     "clean": "rimraf dist/*",
     "clean:modules":"rimraf node_modules/* && rimraf package-lock.json",
-    "install": "npm i"
+    "install": "npm i",
+    "deploy":"npm-run-all build deploy:push",
+    "deploy:push":"git add . && git commit -m \"Heroku Deploy\" && git push && git push heroku main"
   },
   "engines": {
     "node": "14.x.x",
