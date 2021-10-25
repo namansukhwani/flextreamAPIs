@@ -5,9 +5,14 @@
   "scripts": {
     "start:dev": "ts-node ./src/bin/www.ts",
     "watch:dev": "nodemon ./src/bin/www.ts",
-    "start": "npm-run-all build serve",
+    "start": "npm-run-all clean build postbuild serve",
+    "serve": "node ./dist/src/bin/www.js",
     "build": "npx tsc",
-    "serve": "node ./dist/bin/www.js"
+    "postbuild": "npm-run-all copyPublic copyViews",
+    "copyPublic": "copyfiles -u 1 \"./src/public/**\" \"./dist/src/\" ",
+    "copyViews": "copyfiles -u 1 \"./src/views/**\" \"./dist/src/\" ",
+    "clean": "rimraf dist/*",
+    "install": "npm i"
   },
   "engines": {
     "node": "14.x.x",
@@ -37,8 +42,10 @@
     "@types/lodash": "^4.14.176",
     "@types/morgan": "^1.9.3",
     "@types/node": "^16.11.4",
+    "copyfiles": "^2.4.1",
     "nodemon": "^2.0.14",
     "npm-run-all": "^4.1.5",
+    "rimraf": "^3.0.2",
     "ts-node": "^10.3.1",
     "tsconfig-paths": "^3.11.0",
     "typescript": "^4.4.4"
