@@ -6,16 +6,15 @@
     "start:dev": "ts-node ./src/bin/www.ts",
     "watch:dev": "nodemon ./src/bin/www.ts",
     "start": "node ./dist/src/bin/www.js",
+    "dependencies:clean":"rimraf node_modules/* && rimraf package-lock.json",
+    "dependencies:install": "npm i",
     "build": "npm-run-all clean compile postbuildcopy",
     "compile": "npx tsc",
     "postbuildcopy": "npm-run-all copyPublic copyViews",
     "copyPublic": "copyfiles -u 1 \"./src/public/**\" \"./dist/src/\" ",
     "copyViews": "copyfiles -u 1 \"./src/views/**\" \"./dist/src/\" ",
     "clean": "rimraf dist/*",
-    "dependencies:clean":"rimraf node_modules/* && rimraf package-lock.json",
-    "dependencies:install": "npm i",
-    "deploy":"npm-run-all build deploy:push",
-    "deploy:push":"git add . && git commit -m \"Heroku Deploy\" && git push && git push heroku main"
+    "deploy":"git add . && git commit -m \"Heroku Deploy\" && git push && git push heroku main"
   },
   "engines": {
     "node": "14.x.x",
