@@ -14,7 +14,7 @@
     "copyPublic": "copyfiles -u 1 \"./src/public/**\" \"./dist/src/\" ",
     "copyViews": "copyfiles -u 1 \"./src/views/**\" \"./dist/src/\" ",
     "clean": "rimraf dist/*",
-    "deploy": "git add . && git commit -m \"Heroku Deploy\" && git push && git push heroku main",
+    "deploy": "git push heroku main",
     "clean-install-deps": "npm-run-all dependencies:clean dependencies:install",
     "changeDeployRemote:vpn":"heroku git:remote -a vpn-api",
     "changeDeployRemote:flextream":"heroku git:remote -a flextream",
