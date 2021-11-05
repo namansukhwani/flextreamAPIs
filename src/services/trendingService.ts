@@ -20,12 +20,10 @@ export default class TrendingService {
       let movies=await redisService.getValue(redisKey);
       if(!movies){
         const scrappedMovies = await this.scrapMovies();
-        movies = await this.getMovies(scrappedMovies, limit);
+        movies = await this.getMovies(scrappedMovies);
         redisService.setValue(redisKey,movies);
       }
-      else{
-        movies=limit && movies.length>limit? movies.slice(0,limit):movies;
-      }
+      movies=this.getLimitedList(movies,limit)
       res.statusCode = 200;
       res.send(movies);
     } catch (e) {
@@ -77,12 +75,10 @@ export default class TrendingService {
 
   private async getMovies(
     moviesList: trendingScrappedResponse[],
-    limit: number
   ): Promise<unknown> {
-    const list =this.getLimitedList(moviesList,limit);
 
     const promises = [];
-    for (const data of list) {
+    for (const data of moviesList) {
       promises.push(this.getMovie(data.name,data.slug));
     }
 
@@ -108,7 +104,7 @@ export default class TrendingService {
   }
 
   private getLimitedList(
-    moviesList: trendingScrappedResponse[],
+    moviesList: [any],
     limit: number
   ): trendingScrappedResponse[] {
     if (limit)
