@@ -1,0 +1,72 @@
+{
+    "root": true,
+    "parser": "@typescript-eslint/parser",
+    "plugins": [
+        "@typescript-eslint",
+        "prettier",
+        "sonarjs"
+    ],
+    "extends": [
+        "plugin:@typescript-eslint/eslint-recommended",
+        "plugin:@typescript-eslint/recommended",
+        "plugin:prettier/recommended",
+        "plugin:sonarjs/recommended"
+    ],
+    "rules": {
+        "no-console": "error",
+        "no-inline-comments": "error",
+        "lines-around-comment": "error",
+        "no-warning-comments": "error",
+        // "@typescript-eslint/no-empty-interface": "off",
+        // "sonarjs/no-all-duplicated-branches": "error",
+        // "sonarjs/no-element-overwrite": "error",
+        // "sonarjs/no-extra-arguments": "error",
+        // "sonarjs/no-identical-conditions": "error",
+        // "sonarjs/no-identical-expressions": "error",
+        // "sonarjs/no-one-iteration-loop": "error",
+        // "sonarjs/no-use-of-empty-return-value": "error",
+        // "sonarjs/cognitive-complexity": [
+        //     "error",
+        //     5
+        // ],
+        // "sonarjs/max-switch-cases": [
+        //     "error",
+        //     5
+        // ],
+        // "sonarjs/no-collapsible-if": "error",
+        // "sonarjs/no-collection-size-mischeck": "error",
+        // "sonarjs/no-duplicate-string": [
+        //     "error",
+        //     5
+        // ],
+        // "sonarjs/no-duplicated-branches": "error",
+        // "sonarjs/no-identical-functions": "error",
+        // "sonarjs/no-redundant-boolean": "error",
+        // "sonarjs/no-redundant-jump": "error",
+        // "sonarjs/no-same-line-conditional": "error",
+        // "sonarjs/no-small-switch": "error",
+        // "sonarjs/no-unused-collection": "error",
+        // "sonarjs/no-useless-catch": "error",
+        // "sonarjs/prefer-object-literal": "error",
+        // "sonarjs/prefer-single-boolean-return": "error",
+        "quotes": [
+            "error",
+            "single",
+            {
+                "avoidEscape": true,
+                "allowTemplateLiterals": false
+            }
+        ],
+        "prettier/prettier": [
+            "error",
+            {
+                "trailingComma": "all",
+                "singleQuote": true,
+                "printWidth": 100,
+                "semi": true,
+                "tabWidth": 2,
+                "endOfLine": "auto"
+            }
+        ],
+    }
+}

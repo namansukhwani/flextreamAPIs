@@ -1,1 +1,1 @@
-export const numberOnlyRegx=/^\d+$/
+export const numberOnlyRegx = /^\d+$/

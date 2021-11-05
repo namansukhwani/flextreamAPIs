@@ -61,7 +61,7 @@ router.get("/image", (req, res, next) => {
     //       "content-type": "image/jpeg",
     //     });
     //     console.log(data);
-        
+
     //     res.end(data, "binary");
     //   });
     fetch(req.query.url)
@@ -71,7 +71,7 @@ router.get("/image", (req, res, next) => {
         res.set({
           "content-type": "image/jpeg",
         });
-        res.end(data,'binary');
+        res.end(data, 'binary');
       })
       .catch((err) => {
         console.log(err);

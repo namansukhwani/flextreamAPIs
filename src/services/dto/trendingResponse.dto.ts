@@ -1,5 +1,5 @@
-export type trendingScrappedResponse={
-    id:number;
-    name:string;
-    slug:string;
+export type trendingScrappedResponse = {
+    id: number;
+    name: string;
+    slug: string;
 }

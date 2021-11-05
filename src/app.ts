@@ -8,7 +8,7 @@ import cors from 'cors';
 import ResponseError from './util/dto/ResponseError';
 
 import indexRouter from './routes/index'
-import  fetchRouter from './routes/fetch'
+import fetchRouter from './routes/fetch'
 import moviesRouter from './routes/moviesRouter';
 import configration from './configration';
 import redisService from './services/redisService';
@@ -36,7 +36,7 @@ app.use(cors({
 
 app.use('/', indexRouter);
 app.use('/fetch', fetchRouter);
-app.use('/movies',moviesRouter);
+app.use('/movies', moviesRouter);
 
 // catch 404 and forward to error handler
 app.use(function (req, res, next) {
@@ -44,7 +44,7 @@ app.use(function (req, res, next) {
 });
 
 // error handler
-app.use(function (err:ResponseError, req:Request, res:Response, next:NextFunction) {
+app.use(function (err: ResponseError, req: Request, res: Response, next: NextFunction) {
   // set locals, only providing error in development
   res.locals.message = err.message;
   res.locals.error = req.app.get('env') === 'development' ? err : {};

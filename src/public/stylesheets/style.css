@@ -1,8 +1,30 @@
 body {
   padding: 50px;
   font: 14px "Lucida Grande", Helvetica, Arial, sans-serif;
+  background-color: #181b25;
 }
 
 a {
-  color: #00B7FF;
+  color: #0e78f9;
+  font-size:medium;
+  padding: 8px;
+  padding-inline: 12px;
+  border-radius: 20px;
+  width:max-content;
+  background: #ffffff;
+  margin-top: 20px  ;
+  text-decoration: none;
+}
+
+h1{
+  color: #ffffff;
+  padding: 12px;
+  padding-inline: 16px;
+  border-radius: 20px;
+  width:max-content;
+  background-image: linear-gradient(to right top, #008793, #0d81ad, #5d75b5, #9663a2, #b75279);
+}
+
+p{
+  color: #ffffff;
 }
