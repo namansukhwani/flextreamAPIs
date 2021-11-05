@@ -10,8 +10,12 @@ import ResponseError from './util/dto/ResponseError';
 import indexRouter from './routes/index'
 import  fetchRouter from './routes/fetch'
 import moviesRouter from './routes/moviesRouter';
+import configration from './configration';
+import redisService from './services/redisService';
 
-dotenv.config()
+dotenv.config();
+configration.config();
+redisService.config();
 
 var app = express();
 

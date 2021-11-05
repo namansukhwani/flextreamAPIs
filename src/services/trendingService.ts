@@ -2,6 +2,7 @@ import axios from "axios";
 import { NextFunction, Request, Response } from "express";
 import cheerio from "cheerio";
 import { trendingScrappedResponse } from "./dto/trendingResponse.dto";
+import redisService from './redisService';
 
 export default class TrendingService {
   private url = "https://yts.mx/trending-movies";
@@ -15,8 +16,16 @@ export default class TrendingService {
     limit?: number
   ): Promise<void> {
     try {
-      const scrappedMovies = await this.scrapMovies();
-      const movies = await this.getMovies(scrappedMovies, limit);
+      const redisKey=this.getRedisKey();
+      let movies=await redisService.getValue(redisKey);
+      if(!movies){
+        const scrappedMovies = await this.scrapMovies();
+        movies = await this.getMovies(scrappedMovies, limit);
+        redisService.setValue(redisKey,movies);
+      }
+      else{
+        movies=limit && movies.length>limit? movies.slice(0,limit):movies;
+      }
       res.statusCode = 200;
       res.send(movies);
     } catch (e) {
@@ -25,12 +34,12 @@ export default class TrendingService {
     }
   }
 
-  private async getMovie(name: string): Promise<unknown> {
+  private async getMovie(name: string,slug:string): Promise<unknown> {
     try {
       const { data }: { data: any } = await axios.get(
         `${this.apiUrl}${encodeURIComponent(name)}`
       );
-      return data?.data?.movies;
+      return data?.data?.movies?.find((movie: { slug: string; })=>movie.slug===slug);
     } catch (e) {
       throw new Error(`Error from API call: ${e.message}`);
     }
@@ -47,6 +56,7 @@ export default class TrendingService {
       let searchList = [];
       allMovieDivs.each((i, el) => {
         if ($(el).is("a")) {
+          $(el).find('span').remove();
           const name = $(el).text();
           const slug = $(el).attr("href");
 
@@ -73,22 +83,25 @@ export default class TrendingService {
 
     const promises = [];
     for (const data of list) {
-      promises.push(this.getMovie(data.name));
+      promises.push(this.getMovie(data.name,data.slug));
     }
 
     const allMovies = await Promise.all(promises);
     console.info("Parallel API calls: ", allMovies.length);
 
-    const slugs = list.map((movie) => movie.slug);
-    const flattenedMovies = [].concat(...allMovies);
-    const filterMovies = flattenedMovies.filter((movie) => {
-      const slugIndex = slugs.indexOf(movie?.slug);
-      if (slugIndex !== -1) {
-        slugs.splice(slugIndex, 1);
-        return true;
-      }
-      return false;
-    });
+    // const slugs = list.map((movie) => movie.slug);
+    // const flattenedMovies = [].concat(...allMovies);
+    // const filterMovies = flattenedMovies.filter((movie) => {
+    //   const slugIndex = slugs.indexOf(movie?.slug);
+    //   if (slugIndex !== -1) {
+    //     slugs.splice(slugIndex, 1);
+    //     return true;
+    //   }
+    //   return false;
+    // });
+
+    const filterMovies=allMovies.filter(movie=>movie);
+
     console.info("Filtered Movies:", filterMovies.length);
 
     return filterMovies;
@@ -103,5 +116,9 @@ export default class TrendingService {
         ? moviesList.slice(0, limit)
         : moviesList;
     return moviesList;
+  }
+
+  private getRedisKey():string{
+    return 'movies:trending'
   }
 }
