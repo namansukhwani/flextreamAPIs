@@ -3,6 +3,7 @@ import axios from 'axios';
 import ResponseBody, { ErrorCodes } from "../util/dto/responseBody.dto";
 import { MovieBodyQuery, moviesListCategories } from "./dto/moviesListCategories.dto";
 import redisService from './redisService';
+import { getMovieWithDetails } from './../util/commonFunctions';
 
 export default class MovieService {
     private readonly apiSearchUrl = `https://yts.mx/api/v2/list_movies.json?limit=10&${encodeURIComponent(
@@ -16,9 +17,10 @@ export default class MovieService {
             const result = data?.data?.movies?.find((movie: { slug: string; }) => movie.slug.trim() == slug.trim());
             let response: ResponseBody;
             if (result) {
+                const movie=await getMovieWithDetails(result.id)
                 response = {
                     status: true,
-                    data: result,
+                    data: movie,
                 }
                 res.statusCode = 200;
                 res.send(response);

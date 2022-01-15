@@ -3,6 +3,7 @@ import { NextFunction, Request, Response } from "express";
 import cheerio from "cheerio";
 import { trendingScrappedResponse } from "./dto/trendingResponse.dto";
 import redisService from './redisService';
+import { getMovieWithDetails } from "../util/commonFunctions";
 
 export default class TrendingService {
   private url = "https://yts.mx/trending-movies";
@@ -140,20 +141,11 @@ export default class TrendingService {
     return `movies:trending:home`
   }
 
-  private async getMovieWithDetails(movieId: string): Promise<unknown> {
-    try {
-      const { data }: { data: any } = await axios.get(this.getMovieDetailsUrl(movieId));
-      return data.data.movie;
-    } catch (e) {
-      throw new Error(`Error from API call: ${e.message}`);
-    }
-  }
-
   private async getMovieWithExtraData(movies: any): Promise<unknown> {
     console.info("Fetching movies with extra info: ", movies.length);
     const promises = [];
     for (const data of movies) {
-      promises.push(this.getMovieWithDetails(data.id));
+      promises.push(getMovieWithDetails(data.id));
     }
 
     return await Promise.all(promises);
@@ -173,10 +165,6 @@ export default class TrendingService {
     const moviesExtra = await this.getMovieWithExtraData(movies);
     redisService.setValue(redisKey, movies as JSON);
     return moviesExtra;
-  }
-
-  private getMovieDetailsUrl(movieId: string): string {
-    return `https://yts.mx/api/v2//movie_details.json?movie_id=${movieId}&with_images=true&with_cast=true`;
   }
 
 }
