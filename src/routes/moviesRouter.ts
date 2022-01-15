@@ -52,4 +52,10 @@ moviesRouter.get(
   }
 );
 
+moviesRouter.get("/trending/extraDetails",
+(req: Request, res: Response, next: NextFunction) => {
+  trendingService.getTreandingHome(res, next);
+}
+)
+
 export default moviesRouter;

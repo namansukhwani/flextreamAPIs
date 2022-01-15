@@ -10,6 +10,36 @@ export default class TrendingService {
     "query_term"
   )}=`;
 
+  async getTreandingHome(
+    res: Response,
+    next: NextFunction,
+  ): Promise<void> {
+    try {
+      const redisKey = this.getRedisKey();
+      const redisKeyHome = this.getRedisKeyTrendingHome();
+      let movies = await redisService.getValue(redisKey)
+      let moviesExtra = await redisService.getValue(redisKeyHome)
+      if (!movies && !moviesExtra) {
+        movies = await this.getMoviesIfNotInCache();
+        moviesExtra=await this.getMoviesExtraIfNotInCache(movies);
+      }
+      else {
+        if (!movies) {
+          this.getMoviesIfNotInCache();
+        }
+        else {
+          moviesExtra=await this.getMoviesExtraIfNotInCache(movies)
+        }
+      }
+      res.statusCode = 200;
+      res.send(moviesExtra);
+    } catch (e) {
+      console.error(`Error:`, e);
+      next(e);
+    }
+
+  }
+
   async getTreanding(
     res: Response,
     next: NextFunction,
@@ -19,9 +49,8 @@ export default class TrendingService {
       const redisKey = this.getRedisKey();
       let movies = await redisService.getValue(redisKey);
       if (!movies) {
-        const scrappedMovies = await this.scrapMovies();
-        movies = await this.getMovies(scrappedMovies);
-        redisService.setValue(redisKey, movies);
+        movies = await this.getMoviesIfNotInCache();
+        this.getMovieWithExtraData(movies);
       }
       movies = this.getLimitedList(movies, limit)
       res.statusCode = 200;
@@ -85,11 +114,11 @@ export default class TrendingService {
     const allMovies = await Promise.all(promises);
     console.info("Parallel API calls: ", allMovies.length);
 
-    const filterMovies = allMovies.filter(movie => movie);
+    // const filterMovies = allMovies.filter(movie => movie);
 
-    console.info("Filtered Movies:", filterMovies.length);
+    // console.info("Filtered Movies:", filterMovies.length);
 
-    return filterMovies;
+    return allMovies;
   }
 
   private getLimitedList(
@@ -106,4 +135,48 @@ export default class TrendingService {
   private getRedisKey(): string {
     return 'movies:trending'
   }
+
+  private getRedisKeyTrendingHome(): string {
+    return `movies:trending:home`
+  }
+
+  private async getMovieWithDetails(movieId:string):Promise<unknown>{
+    try {
+      const { data }: { data: any } = await axios.get(this.getMovieDetailsUrl(movieId));
+      return data.data.movie;
+    } catch (e) {
+      throw new Error(`Error from API call: ${e.message}`);
+    }
+  }
+
+  private async getMovieWithExtraData(movies:any): Promise<unknown> {
+    console.info("Fetching movies with extra info: ", movies.length);
+    const promises = [];
+    for (const data of movies) {
+      promises.push(this.getMovieWithDetails(data.id));
+    }
+
+    return await Promise.all(promises);
+  }
+
+  private async getMoviesIfNotInCache(): Promise<unknown> {
+    const redisKey = this.getRedisKey();
+    const scrappedMovies = await this.scrapMovies();
+    const movies = await this.getMovies(scrappedMovies);
+    redisService.setValue(redisKey, movies as JSON);
+    return movies;
+  }
+
+  private async getMoviesExtraIfNotInCache(movies:any):Promise<unknown>{
+    movies=this.getLimitedList(movies, 8)
+    const redisKey = this.getRedisKeyTrendingHome();
+    const moviesExtra=await this.getMovieWithExtraData(movies);
+    redisService.setValue(redisKey, movies as JSON);
+    return moviesExtra;
+  }
+
+  private getMovieDetailsUrl(movieId:string):string{
+    return `https://yts.mx/api/v2//movie_details.json?movie_id=${movieId}&with_images=true&with_cast=true`;
+  }
+
 }
