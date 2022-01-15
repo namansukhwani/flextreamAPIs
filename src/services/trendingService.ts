@@ -28,7 +28,7 @@ export default class TrendingService {
       else if (!movies) {
         this.getMoviesIfNotInCache();
       }
-      else {
+      else if (!moviesExtra) {
         moviesExtra = await this.getMoviesExtraIfNotInCache(movies)
       }
       res.statusCode = 200;
