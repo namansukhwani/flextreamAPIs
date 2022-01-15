@@ -20,16 +20,16 @@ export default class TrendingService {
       let movies = await redisService.getValue(redisKey)
       let moviesExtra = await redisService.getValue(redisKeyHome)
       if (!movies && !moviesExtra) {
+        console.log(`Nothing in cache moviesLen(${movies}) moviesExtra(${moviesExtra})`);
+
         movies = await this.getMoviesIfNotInCache();
-        moviesExtra=await this.getMoviesExtraIfNotInCache(movies);
+        moviesExtra = await this.getMoviesExtraIfNotInCache(movies);
+      }
+      else if (!movies) {
+        this.getMoviesIfNotInCache();
       }
       else {
-        if (!movies) {
-          this.getMoviesIfNotInCache();
-        }
-        else {
-          moviesExtra=await this.getMoviesExtraIfNotInCache(movies)
-        }
+        moviesExtra = await this.getMoviesExtraIfNotInCache(movies)
       }
       res.statusCode = 200;
       res.send(moviesExtra);
@@ -140,7 +140,7 @@ export default class TrendingService {
     return `movies:trending:home`
   }
 
-  private async getMovieWithDetails(movieId:string):Promise<unknown>{
+  private async getMovieWithDetails(movieId: string): Promise<unknown> {
     try {
       const { data }: { data: any } = await axios.get(this.getMovieDetailsUrl(movieId));
       return data.data.movie;
@@ -149,7 +149,7 @@ export default class TrendingService {
     }
   }
 
-  private async getMovieWithExtraData(movies:any): Promise<unknown> {
+  private async getMovieWithExtraData(movies: any): Promise<unknown> {
     console.info("Fetching movies with extra info: ", movies.length);
     const promises = [];
     for (const data of movies) {
@@ -167,15 +167,15 @@ export default class TrendingService {
     return movies;
   }
 
-  private async getMoviesExtraIfNotInCache(movies:any):Promise<unknown>{
-    movies=this.getLimitedList(movies, 8)
+  private async getMoviesExtraIfNotInCache(movies: any): Promise<unknown> {
+    movies = this.getLimitedList(movies, 8)
     const redisKey = this.getRedisKeyTrendingHome();
-    const moviesExtra=await this.getMovieWithExtraData(movies);
+    const moviesExtra = await this.getMovieWithExtraData(movies);
     redisService.setValue(redisKey, movies as JSON);
     return moviesExtra;
   }
 
-  private getMovieDetailsUrl(movieId:string):string{
+  private getMovieDetailsUrl(movieId: string): string {
     return `https://yts.mx/api/v2//movie_details.json?movie_id=${movieId}&with_images=true&with_cast=true`;
   }
 
