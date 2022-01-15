@@ -16,21 +16,12 @@ export default class TrendingService {
     next: NextFunction,
   ): Promise<void> {
     try {
-      const redisKey = this.getRedisKey();
-      const redisKeyHome = this.getRedisKeyTrendingHome();
-      let movies = await redisService.getValue(redisKey)
-      let moviesExtra = await redisService.getValue(redisKeyHome)
-      if (!movies && !moviesExtra) {
-        console.log(`Nothing in cache moviesLen(${movies}) moviesExtra(${moviesExtra})`);
-
-        movies = await this.getMoviesIfNotInCache();
+      const redisKeyTrendingHome = this.getRedisKeyTrendingHome();
+      let moviesExtra = await redisService.getValue(redisKeyTrendingHome)
+      if (!moviesExtra) {
+        console.log(`Nothing in cache moviesExtra(${moviesExtra})`);
+        const movies = await this.getMoviesIfNotInCache();
         moviesExtra = await this.getMoviesExtraIfNotInCache(movies);
-      }
-      else if (!movies) {
-        this.getMoviesIfNotInCache();
-      }
-      else if (!moviesExtra) {
-        moviesExtra = await this.getMoviesExtraIfNotInCache(movies)
       }
       res.statusCode = 200;
       res.send(moviesExtra);
@@ -51,7 +42,7 @@ export default class TrendingService {
       let movies = await redisService.getValue(redisKey);
       if (!movies) {
         movies = await this.getMoviesIfNotInCache();
-        this.getMovieWithExtraData(movies);
+        this.getMoviesExtraIfNotInCache(movies);
       }
       movies = this.getLimitedList(movies, limit)
       res.statusCode = 200;
@@ -138,7 +129,7 @@ export default class TrendingService {
   }
 
   private getRedisKeyTrendingHome(): string {
-    return `movies:trending:home`
+    return `movies:trending:homeView:8`
   }
 
   private async getMovieWithExtraData(movies: any): Promise<unknown> {
@@ -163,7 +154,7 @@ export default class TrendingService {
     movies = this.getLimitedList(movies, 8)
     const redisKey = this.getRedisKeyTrendingHome();
     const moviesExtra = await this.getMovieWithExtraData(movies);
-    redisService.setValue(redisKey, movies as JSON);
+    redisService.setValue(redisKey, moviesExtra as JSON);
     return moviesExtra;
   }
 
