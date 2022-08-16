@@ -103,9 +103,9 @@ export default class TrendingService {
       promises.push(this.getMovie(data.name, data.slug));
     }
 
-    const allMovies = await Promise.all(promises);
+    let allMovies = await Promise.all(promises);
     console.info("Parallel API calls: ", allMovies.length);
-
+    allMovies=allMovies.filter(movie=>movie)
     // const filterMovies = allMovies.filter(movie => movie);
 
     // console.info("Filtered Movies:", filterMovies.length);
