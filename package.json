@@ -21,7 +21,7 @@
     "changeDeployRemote:flextream2": "heroku git:remote -a flextream2"
   },
   "engines": {
-    "node": "18.x.x"
+    "node": "14.x.x"
   },
   "dependencies": {
     "axios": "^0.23.0",
