@@ -21,7 +21,8 @@
     "changeDeployRemote:flextream2": "heroku git:remote -a flextream2"
   },
   "engines": {
-    "node": "14.x.x"
+    "node": "14.x.x",
+    "npm": "6.x.x"
   },
   "dependencies": {
     "axios": "^0.23.0",
@@ -31,13 +32,13 @@
     "debug": "~2.6.9",
     "dotenv": "^10.0.0",
     "express": "~4.16.1",
-    "file-type": "^16.3.0",
+    "file-type": "^16.5.4",
     "http-errors": "~1.6.3",
     "ioredis": "^4.28.0",
     "jade": "~1.11.0",
     "lodash": "^4.17.21",
     "morgan": "~1.9.1",
-    "node-fetch": "^2.6.1"
+    "node-fetch": "^2.6.7"
   },
   "devDependencies": {
     "@types/cookie-parser": "^1.4.2",
@@ -55,7 +56,7 @@
     "eslint": "^8.1.0",
     "eslint-config-prettier": "^8.3.0",
     "eslint-plugin-prettier": "^4.0.0",
-    "nodemon": "^2.0.14",
+    "nodemon": "^2.0.20",
     "npm-run-all": "^4.1.5",
     "rimraf": "^3.0.2",
     "ts-node": "^10.3.1",
