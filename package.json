@@ -8,7 +8,7 @@
     "start": "node ./dist/src/bin/www.js",
     "dependencies:clean": "rimraf package-lock.json && rimraf node_modules",
     "dependencies:install": "npm i",
-    "build": "npm-run-all clean compile postbuildcopy",
+    "build": "npm i && npm-run-all clean compile postbuildcopy",
     "compile": "npx tsc",
     "postbuildcopy": "npm-run-all copyPublic copyViews",
     "copyPublic": "copyfiles -u 1 \"./src/public/**\" \"./dist/src/\" ",
