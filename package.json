@@ -8,9 +8,9 @@
     "start": "node ./dist/src/bin/www.js",
     "dependencies:clean": "rimraf package-lock.json && rimraf node_modules",
     "dependencies:install": "npm i",
-    "build": "npm run clean && npm run compile && npm run postbuildcopy",
+    "build": "npm-run-all clean compile postbuildcopy",
     "compile": "npx tsc",
-    "postbuildcopy": "npm run copyPublic && npm run copyViews",
+    "postbuildcopy": "npm-run-all copyPublic copyViews",
     "copyPublic": "copyfiles -u 1 \"./src/public/**\" \"./dist/src/\" ",
     "copyViews": "copyfiles -u 1 \"./src/views/**\" \"./dist/src/\" ",
     "clean": "rimraf dist/*",
@@ -18,7 +18,8 @@
     "clean-install-deps": "npm-run-all dependencies:clean dependencies:install",
     "changeDeployRemote:vpn": "heroku git:remote -a vpn-api",
     "changeDeployRemote:flextream": "heroku git:remote -a flextream",
-    "changeDeployRemote:flextream2": "heroku git:remote -a flextream2"
+    "changeDeployRemote:flextream2": "heroku git:remote -a flextream2",
+    "postinstall": "npm audit fix --dry-run"
   },
   "engines": {
     "node": "14.x.x",
@@ -32,13 +33,13 @@
     "debug": "~2.6.9",
     "dotenv": "^10.0.0",
     "express": "~4.16.1",
-    "file-type": "^16.5.4",
+    "file-type": "^16.3.0",
     "http-errors": "~1.6.3",
     "ioredis": "^4.28.0",
     "jade": "~1.11.0",
     "lodash": "^4.17.21",
     "morgan": "~1.9.1",
-    "node-fetch": "^2.6.7"
+    "node-fetch": "^2.6.1"
   },
   "devDependencies": {
     "@types/cookie-parser": "^1.4.2",
@@ -56,7 +57,7 @@
     "eslint": "^8.1.0",
     "eslint-config-prettier": "^8.3.0",
     "eslint-plugin-prettier": "^4.0.0",
-    "nodemon": "^2.0.20",
+    "nodemon": "^2.0.14",
     "npm-run-all": "^4.1.5",
     "rimraf": "^3.0.2",
     "ts-node": "^10.3.1",
