@@ -1,5 +1,5 @@
 {
-  "name": "vpn-api",
+  "name": "flextream-apiservices",
   "version": "2.0.0",
   "private": true,
   "scripts": {
@@ -21,8 +21,7 @@
     "changeDeployRemote:flextream2": "heroku git:remote -a flextream2"
   },
   "engines": {
-    "node": "14.x.x",
-    "yarn": "1.x.x"
+    "node": "18.x.x"
   },
   "dependencies": {
     "axios": "^0.23.0",
