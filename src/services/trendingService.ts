@@ -7,7 +7,7 @@ import { getMovieWithDetails } from "../util/commonFunctions";
 
 export default class TrendingService {
   private url = "https://yts.mx/trending-movies";
-  private apiUrl = `https://yts.mx/api/v2/list_movies.json?limit=6&${encodeURIComponent(
+  private apiUrl = `https://yts.mx/api/v2/list_movies.json?limit=10&${encodeURIComponent(
     "query_term"
   )}=`;
 
