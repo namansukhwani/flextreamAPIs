@@ -19,11 +19,11 @@
     "changeDeployRemote:vpn": "heroku git:remote -a vpn-api",
     "changeDeployRemote:flextream": "heroku git:remote -a flextream",
     "changeDeployRemote:flextream2": "heroku git:remote -a flextream2",
-    "postinstall": "npm audit fix --dry-run"
+    "start:pm2": "pm2-runtime start ecosystem.config.js --env production"
   },
   "engines": {
-    "node": "14.x.x",
-    "npm": "6.x.x"
+    "node": "16.x.x",
+    "npm": "8.x.x"
   },
   "dependencies": {
     "axios": "^0.23.0",
@@ -39,7 +39,8 @@
     "jade": "~1.11.0",
     "lodash": "^4.17.21",
     "morgan": "~1.9.1",
-    "node-fetch": "^2.6.1"
+    "node-fetch": "^2.6.1",
+    "pm2": "^5.2.2"
   },
   "devDependencies": {
     "@types/cookie-parser": "^1.4.2",
