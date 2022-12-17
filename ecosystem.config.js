@@ -4,6 +4,7 @@ module.exports= {
       name: 'flextream-api',
       script: 'dist/src/bin/www.js',
       instances: 'max',
+      exec_mode : "cluster",
       env: {
         NODE_ENV: 'development',
       },
