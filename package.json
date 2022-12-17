@@ -5,7 +5,7 @@
   "scripts": {
     "start:dev": "ts-node ./src/bin/www.ts",
     "watch:dev": "nodemon ./src/bin/www.ts",
-    "start": "node ./dist/src/bin/www.js",
+    "start": "pm2-runtime start ecosystem.config.js --env production",
     "dependencies:clean": "rimraf package-lock.json && rimraf node_modules",
     "dependencies:install": "npm i",
     "build": "npm-run-all clean compile postbuildcopy",
@@ -19,7 +19,8 @@
     "changeDeployRemote:vpn": "heroku git:remote -a vpn-api",
     "changeDeployRemote:flextream": "heroku git:remote -a flextream",
     "changeDeployRemote:flextream2": "heroku git:remote -a flextream2",
-    "start:pm2": "pm2-runtime start ecosystem.config.js --env production"
+    "start:pm2": "pm2-runtime start ecosystem.config.js --env production",
+    "install": "npm i "
   },
   "engines": {
     "node": "16.x.x",
